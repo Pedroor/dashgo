@@ -28,11 +28,25 @@ export default function UserList() {
   const { data, isLoading, error } = useQuery("users", async () => {
     const response = await api.get("/users");
 
-    return response.data;
+    const users = response.data.users.map(user => {
+      return {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        createdAt: new Date(user.createdAt).toLocaleDateString("pt-BR", {
+          day: "2-digit",
+          month: "long",
+          year: "numeric",
+        }),
+      };
+    });
+
+    return users;
   });
 
   useEffect(() => {
     console.log(isLoading);
+    console.log(data);
   }, [isLoading]);
 
   const isWildVersion = useBreakpointValue({
@@ -84,7 +98,7 @@ export default function UserList() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {data.users.map(user => {
+                  {data.map(user => {
                     return (
                       <Tr key={user.id}>
                         <Td px={["4", "4", "6"]}>
@@ -98,7 +112,7 @@ export default function UserList() {
                             </Text>
                           </Box>
                         </Td>
-                        {isWildVersion && <Td>{user.created_at}</Td>}
+                        {isWildVersion && <Td>{user.createdAt}</Td>}
                         <Td>
                           {isWildVersion && (
                             <Button
