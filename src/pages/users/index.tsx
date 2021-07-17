@@ -28,11 +28,9 @@ import { queryClient } from "../../services/queryClient";
 import { api } from "../../services/api";
 import { GetServerSideProps } from "next";
 
-export default function UserList({ users }) {
+export default function UserList() {
   const [page, setPage] = useState(1);
-  const { data, isLoading, error, isFetching } = useUsers(page, {
-    initialData: users,
-  });
+  const { data, isLoading, error, isFetching } = useUsers(page);
 
   useEffect(() => {
     console.log(isLoading);
@@ -161,12 +159,12 @@ export default function UserList({ users }) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  const { users, totalCount } = await getUsers(1);
+// export const getServerSideProps: GetServerSideProps = async () => {
+//   const { users, totalCount } = await getUsers(1);
 
-  return {
-    props: {
-      users,
-    },
-  };
-};
+//   return {
+//     props: {
+//       users,
+//     },
+//   };
+// };
