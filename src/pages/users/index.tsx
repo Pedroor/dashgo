@@ -15,7 +15,7 @@ import {
   useBreakpointValue,
   Spinner,
 } from "@chakra-ui/react";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { RiAddLine, RiPencilLine } from "react-icons/ri";
 import { Header } from "../../components/Header";
@@ -24,7 +24,8 @@ import { Pagination } from "../../components/Pagination";
 import { useUsers } from "../../services/hooks/useUsers";
 
 export default function UserList() {
-  const { data, isLoading, error, isFetching } = useUsers();
+  const [page, setPage] = useState(1);
+  const { data, isLoading, error, isFetching } = useUsers(page);
 
   useEffect(() => {
     console.log(isLoading);
@@ -83,7 +84,7 @@ export default function UserList() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {data.map(user => {
+                  {data.users.map(user => {
                     return (
                       <Tr key={user.id}>
                         <Td px={["4", "4", "6"]}>
@@ -119,9 +120,9 @@ export default function UserList() {
                 </Tbody>
               </Table>
               <Pagination
-                totalCounterOfRegisters={200}
-                currentPage={5}
-                onPageChange={() => {}}
+                totalCounterOfRegisters={data.totalCount}
+                currentPage={page}
+                onPageChange={setPage}
               />
             </>
           )}
